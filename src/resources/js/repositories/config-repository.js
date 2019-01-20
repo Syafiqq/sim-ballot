@@ -4,7 +4,7 @@ function sleep (ms) {
 
 export const ConfigRepository = {
   get: async () => {
-    await sleep(2000);
+    await sleep(10);
     return {
       'parties': [
         'MANGGA',
