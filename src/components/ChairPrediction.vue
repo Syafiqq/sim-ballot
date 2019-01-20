@@ -12,8 +12,8 @@ export default {
       items: items,
       fields: [
         {key: 'no', label: 'No', thStyle: {width: '50px'}},
-        {key: 'partai', label: 'Partai', thStyle: {width: '150px'}},
-        {key: 'suara', label: 'Suara', thStyle: {width: '100px'}}
+        {key: 'party', label: 'Partai', thStyle: {width: '150px'}},
+        {key: 'ballot', label: 'Suara', thStyle: {width: '100px'}}
       ]
     }
   },
