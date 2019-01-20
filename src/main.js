@@ -5,6 +5,8 @@ import store from './store'
 import PlainContainer from './containers/PlainContainer.vue'
 import BootstrapVue from 'bootstrap-vue'
 
+require('./resources/js/bootstrap.js');
+
 Vue.config.productionTip = false;
 Vue.component('plain-container', PlainContainer);
 Vue.use(BootstrapVue);
