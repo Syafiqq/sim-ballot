@@ -38,6 +38,6 @@ export default {
 
 
 <style lang="scss">
-
+@import "resources/css/app";
 </style>
 
