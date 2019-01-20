@@ -1,5 +1,5 @@
 <template lang="pug">
-  b-table(responsive='', bordered='', outlined='', footClone='', hover='', :items='items', :fields='fields')
+  b-table(responsive='', bordered='', outlined='', footClone='', hover='', :items='items', :fields='sFields')
 </template>
 
 <script>
@@ -16,7 +16,12 @@ export default {
         {key: 'suara', label: 'Suara', thStyle: {width: '100px'}}
       ]
     }
-  }
+  },
+  computed: {
+    sFields () {
+      return this.fields
+    }
+  },
 }
 
 </script>
