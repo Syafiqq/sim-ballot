@@ -11,7 +11,7 @@ export default new Router({
       path: '/',
       name: 'root',
       meta: {layout: 'plain-container'},
-      component: () => import('./views/Home.vue')
+      component: require('./views/Home.vue').default
     },
     {
       path: '/about',
