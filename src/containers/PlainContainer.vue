@@ -1,5 +1,6 @@
 <template lang="pug">
-  slot
+  div
+    slot
 </template>
 
 <script>
