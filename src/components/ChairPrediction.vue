@@ -33,11 +33,12 @@ export default {
         key: 'party',
         label: 'Partai',
         thStyle: {width: '150px'},
-        tdClass: ['text-uppercase']
+        tdClass: ['text-uppercase', 'bg-party']
       }, {
         key: 'ballot',
         label: 'Suara',
-        thStyle: {width: '100px'}
+        thStyle: {width: '100px'},
+        tdClass: ['bg-ballot']
       }
       ];
       window._.forEach(window._.range(1, ranks + 1), (value) => {
