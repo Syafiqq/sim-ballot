@@ -73,6 +73,7 @@ export default {
           item[`r${value}`] = {
             rank: value + 1,
             position: max,
+            position_display: max,
             value: 0,
           };
         });
