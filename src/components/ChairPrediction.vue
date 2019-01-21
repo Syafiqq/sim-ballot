@@ -43,7 +43,7 @@ export default {
       ];
       window._.forEach(window._.range(1, ranks + 1), (value) => {
         fields.push({
-          key: `r${value}.value`,
+          key: `c.r${value}.value`,
           label: `R${value * 2 - 1}`,
           thStyle: {width: '80px'},
           tdClass: ['text-right'],
@@ -67,10 +67,11 @@ export default {
         let item = {
           no: k + 1,
           party: v,
-          ballot: 0
+          ballot: 0,
+          c: {}
         };
         window._.forEach(window._.range(1, ranks + 1), (value) => {
-          item[`r${value}`] = {
+          item.c[`r${value}`] = {
             rank: value + 1,
             position: max,
             position_display: max,
