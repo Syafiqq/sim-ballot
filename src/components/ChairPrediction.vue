@@ -1,17 +1,16 @@
 <template lang="pug">
-  b-table(responsive='', bordered='', outlined='', hover='', :items='items', :fields='sFields')
+  b-table(responsive='', bordered='', outlined='', hover='', :items='sItems', :fields='sFields')
 </template>
 
 <script>
 import {ConfigRepository} from "@/resources/js/repositories/config-repository";
 
-const items = [];
 
 export default {
   name: "ChairPrediction",
   data () {
     return {
-      items: items,
+      items: [],
       fields: []
     }
   },
@@ -44,6 +43,9 @@ export default {
   computed: {
     sFields () {
       return this.fields
+    },
+    sItems () {
+      return this.items
     }
   },
 }
