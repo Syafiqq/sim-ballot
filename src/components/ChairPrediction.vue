@@ -21,7 +21,7 @@ export default {
     async fetch () {
       const {parties, num_ranks} = await ConfigRepository.get();
       this.mergeFields(num_ranks);
-      this.createParties(parties);
+      this.createParties(parties, num_ranks);
     },
     mergeFields (ranks) {
       let vm = this;
@@ -31,7 +31,7 @@ export default {
         {key: 'ballot', label: 'Suara', thStyle: {width: '100px'}}
       ];
       window._.forEach(window._.range(1, ranks + 1), (value) => {
-        fields.push({key: `r.${value}`, label: `R${value * 2 - 1}`, thStyle: {width: '80px'}})
+        fields.push({key: `r${value}.value`, label: `R${value * 2 - 1}`, thStyle: {width: '80px'}})
       });
       while (vm.fields.length > 0) {
         vm.fields.pop();
@@ -40,17 +40,26 @@ export default {
         vm.fields.push(value);
       })
     },
-    createParties (parties) {
+    createParties (parties, ranks) {
       let vm = this;
+      const max = parties.length * ranks;
       while (vm.items.length > 0) {
         vm.items.pop();
       }
       window._.forEach(parties, (v, k) => {
-        vm.items.push({
+        let item = {
           no: k + 1,
           party: v,
           ballot: 0
-        })
+        };
+        window._.forEach(window._.range(1, ranks + 1), (value) => {
+          item[`r${value}`] = {
+            rank: value + 1,
+            position: max,
+            value: 0,
+          };
+        });
+        vm.items.push(item)
       })
     }
   },
