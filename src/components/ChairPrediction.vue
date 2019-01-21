@@ -1,5 +1,7 @@
 <template lang="pug">
   b-table(responsive='', bordered='', outlined='', hover='', :items='sItems', :fields='sFields')
+    template(slot='ballot', slot-scope='data')
+      input.form-control-sm(type='number', style='width:5em', v-model='data.item.ballot')
 </template>
 
 <script>
