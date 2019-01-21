@@ -25,13 +25,29 @@ export default {
     },
     mergeFields (ranks) {
       let vm = this;
-      let fields = [
-        {key: 'no', label: 'No', thStyle: {width: '50px'}},
-        {key: 'party', label: 'Partai', thStyle: {width: '150px'}},
-        {key: 'ballot', label: 'Suara', thStyle: {width: '100px'}}
+      let fields = [{
+        key: 'no',
+        label: 'No',
+        thStyle: {width: '50px'}
+      }, {
+        key: 'party',
+        label: 'Partai',
+        thStyle: {width: '150px'},
+        tdClass: ['text-uppercase']
+      }, {
+        key: 'ballot',
+        label: 'Suara',
+        thStyle: {width: '100px'}
+      }
       ];
       window._.forEach(window._.range(1, ranks + 1), (value) => {
-        fields.push({key: `r${value}.value`, label: `R${value * 2 - 1}`, thStyle: {width: '80px'}})
+        fields.push({
+          key: `r${value}.value`,
+          label: `R${value * 2 - 1}`,
+          thStyle: {width: '80px'},
+          tdClass: ['text-right'],
+          thClass: ['text-center']
+        })
       });
       while (vm.fields.length > 0) {
         vm.fields.pop();
