@@ -13,7 +13,8 @@ export default {
   data () {
     return {
       items: [],
-      fields: []
+      fields: [],
+      numSplit: 0,
     }
   },
   created () {
@@ -22,6 +23,7 @@ export default {
   methods: {
     async fetch () {
       const {parties, num_ranks} = await ConfigRepository.get();
+      this.numSplit = num_ranks;
       this.mergeFields(num_ranks);
       this.createParties(parties, num_ranks);
     },
