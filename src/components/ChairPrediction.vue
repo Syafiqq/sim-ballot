@@ -1,7 +1,7 @@
 <template lang="pug">
   b-table(responsive='', bordered='', outlined='', hover='', :items='sItems', :fields='sFields')
     template(slot='ballot', slot-scope='data')
-      input.form-control-sm(type='number', style='width:5em', v-model='data.item.ballot')
+      input.form-control-sm(type='number', style='width:5em', v-model='data.item.ballot', v-on:input="onBallotChange($event,data.item)")
 </template>
 
 <script>
@@ -82,6 +82,11 @@ export default {
         });
         vm.items.push(item)
       })
+    },
+    onBallotChange (e, v) {
+      window._.forEach(v.c, (v1) => {
+        v1.value = Number(Math.floor(v.ballot / (v1.rank * 2 - 1)));
+      });
     }
   },
   computed: {
