@@ -78,7 +78,7 @@ export default {
         };
         window._.forEach(window._.range(1, ranks + 1), (value) => {
           item.c[`r${value}`] = {
-            rank: value + 1,
+            rank: value,
             position: max,
             position_display: max,
             value: 0,
