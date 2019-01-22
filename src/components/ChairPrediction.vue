@@ -85,7 +85,7 @@ export default {
     },
     onBallotChange (e, v) {
       window._.forEach(v.c, (v1) => {
-        v1.value = Number(Math.floor(v.ballot / (v1.rank * 2 - 1)));
+        v1.value = Number(Math.round(v.ballot / (v1.rank * 2 - 1)));
       });
     }
   },
