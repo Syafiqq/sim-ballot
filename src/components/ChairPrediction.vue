@@ -106,7 +106,7 @@ export default {
       });
       //sort value
       let dr = 0, vr = Number.MIN_SAFE_INTEGER;
-      window._.forEach(window._.sortBy(process, x => -x.b, x => x.s0, x => x.s1), (v, k) => {
+      window._.forEach(window._.sortBy(process, x => -x.b, x => x.s1, x => x.s0), (v, k) => {
         if (v.b !== vr) {
           vr = v.b;
           dr = k + 1
