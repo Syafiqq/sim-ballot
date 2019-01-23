@@ -2,8 +2,11 @@
   b-table(responsive='', bordered='', outlined='', hover='', :items='sItems', :fields='sFields')
     template(slot='ballot', slot-scope='data')
       input.form-control-sm(type='number', style='width:5em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
-    template(v-for="(item) in cNumSplit", v-bind:slot='item', slot-scope='data' )
-      | {{data.value+100}}
+    template(v-for="(item, index) in cNumSplit", v-bind:slot="item", slot-scope='data')
+      .d-flex.justify-content-between
+        b-badge(v-if="true", variant='primary', v-html="data.value.position_display")
+        div(v-else='')
+        | {{data.value.value}}
 </template>
 
 <script>
@@ -49,10 +52,10 @@ export default {
       ];
       window._.forEach(window._.range(1, ranks + 1), (value) => {
         fields.push({
-          key: `c.r${value}.value`,
+          key: `c.r${value}`,
           label: `R${value * 2 - 1}`,
           thStyle: {width: '80px'},
-          tdClass: ['text-right'],
+          tdClass: ['text-left'],
           thClass: ['text-center']
         })
       });
@@ -101,7 +104,7 @@ export default {
       return this.items
     },
     cNumSplit () {
-      return window._.map(window._.range(1, this.numSplit + 1), x => `c.r${x}.value`);
+      return window._.map(window._.range(1, this.numSplit + 1), x => `c.r${x}`);
     }
   },
 }
