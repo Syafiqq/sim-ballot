@@ -4,7 +4,7 @@
       input.form-control-sm(type='number', style='width:8em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
     template(v-for="item in cNumSplit", v-bind:slot="item", slot-scope='data')
       .d-flex.justify-content-between
-        b-badge(v-if="data.value.position <= cRanks", variant='primary', v-html="data.value.position_display")
+        b-badge(v-if="data.value.position <= cRanks", variant='primary', v-html="data.value.position_display", style="width:2.5em")
         div(v-else='')
         span.pl-3 {{data.value.value}}
 </template>
