@@ -70,7 +70,7 @@ export default {
     },
     createParties (parties, ranks) {
       let vm = this;
-      const max = parties.length * ranks;
+      const max = parties.length * ranks * 10;
       while (vm.items.length > 0) {
         vm.items.pop();
       }
