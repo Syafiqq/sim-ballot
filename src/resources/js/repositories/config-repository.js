@@ -21,7 +21,7 @@ export const ConfigRepository = {
         'DUKU'
       ],
       'num_ranks': 12,
-      'total_ranks': 12
+      'total_ranks': 0
     }
   }
 };
