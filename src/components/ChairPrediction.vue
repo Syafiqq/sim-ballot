@@ -79,6 +79,8 @@ export default {
           no: k + 1,
           party: v,
           ballot: 0,
+          alloc: 0,
+          detail: [],
           c: {}
         };
         window._.forEach(window._.range(1, ranks + 1), (value) => {
@@ -117,6 +119,11 @@ export default {
       while (process.length > 0) {
         process.pop()
       }
+      window._.forEach(this.items, v => {
+        let col = window._.filter(v.c, x => x.position <= this.cRanks);
+        v.alloc = col.length;
+        v.detail = window._.map(col, x => x.position_display);
+      })
     },
     onBallotChange (e, v) {
       window._.forEach(v.c, (v1) => {
