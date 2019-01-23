@@ -92,11 +92,38 @@ export default {
         vm.items.push(item)
       })
     },
+    onRanksChange () {
+      //store value
+      let process = [];
+      window._.forEach(this.sItems, (v, k) => {
+        let x = -1;
+        window._.forEach(v.c, (v1, k1) => process.push({
+          b: v1.value,
+          s0: k,
+          s1: ++x,
+          s2: k1,
+        }))
+      });
+      //sort value
+      let dr = 0, vr = Number.MIN_SAFE_INTEGER;
+      window._.forEach(window._.sortBy(process, x => -x.b, x => x.s0, x => x.s1), (v, k) => {
+        if (v.b !== vr) {
+          vr = v.b;
+          dr = k + 1
+        }
+        this.items[v.s0]['c'][v.s2]['position'] = k + 1;
+        this.items[v.s0]['c'][v.s2]['position_display'] = dr;
+      });
+      while (process.length > 0) {
+        process.pop()
+      }
+    },
     onBallotChange (e, v) {
       window._.forEach(v.c, (v1) => {
         v1.value = Number(Math.round(v.ballot / (v1.rank * 2 - 1)));
       });
-    }
+      this.onRanksChange();
+    },
   },
   computed: {
     sFields () {
