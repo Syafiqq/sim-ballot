@@ -6,7 +6,7 @@
       .d-flex.justify-content-between
         b-badge(v-if="data.value.position <= cRanks", variant='primary', v-html="data.value.position_display")
         div(v-else='')
-        | {{data.value.value}}
+        span.pl-3 {{data.value.value}}
 </template>
 
 <script>
