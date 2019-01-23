@@ -55,7 +55,7 @@ export default {
       window._.forEach(window._.range(1, ranks + 1), (value) => {
         fields.push({
           key: `c.r${value}`,
-          label: `R${value * 2 - 1}`,
+          label: `${value * 2 - 1}`,
           thStyle: {width: '80px'},
           tdClass: ['text-left'],
           thClass: ['text-center']
