@@ -4,7 +4,7 @@
       input.form-control-sm(type='number', style='width:5em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
     template(v-for="(item, index) in cNumSplit", v-bind:slot="item", slot-scope='data')
       .d-flex.justify-content-between
-        b-badge(v-if="true", variant='primary', v-html="data.value.position_display")
+        b-badge(v-if="data.value.position < cRanks", variant='primary', v-html="data.value.position_display")
         div(v-else='')
         | {{data.value.value}}
 </template>
@@ -20,6 +20,7 @@ export default {
       items: [],
       fields: [],
       numSplit: 0,
+      ranks: 0,
     }
   },
   created () {
@@ -27,8 +28,9 @@ export default {
   },
   methods: {
     async fetch () {
-      const {parties, num_ranks} = await ConfigRepository.get();
+      const {parties, num_ranks, total_ranks} = await ConfigRepository.get();
       this.numSplit = num_ranks;
+      this.ranks = total_ranks;
       this.mergeFields(num_ranks);
       this.createParties(parties, num_ranks);
     },
@@ -105,6 +107,9 @@ export default {
     },
     cNumSplit () {
       return window._.map(window._.range(1, this.numSplit + 1), x => `c.r${x}`);
+    },
+    cRanks () {
+      return this.ranks;
     }
   },
 }
