@@ -2,7 +2,7 @@
   b-table(responsive='', bordered='', outlined='', hover='', :items='sItems', :fields='sFields')
     template(slot='ballot', slot-scope='data')
       input.form-control-sm(type='number', style='width:5em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
-    template(v-for="(item, index) in cNumSplit", v-bind:slot="item", slot-scope='data')
+    template(v-for="item in cNumSplit", v-bind:slot="item", slot-scope='data')
       .d-flex.justify-content-between
         b-badge(v-if="data.value.position < cRanks", variant='primary', v-html="data.value.position_display")
         div(v-else='')
