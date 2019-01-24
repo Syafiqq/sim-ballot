@@ -1,5 +1,7 @@
 <template lang="pug">
   div
+    b-modal(ref='settingsModal', hide-footer='', hide-header='')
+      div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
         .d-flex.justify-content-between
@@ -143,7 +145,7 @@ export default {
       this.onRanksChange();
     },
     openSettings () {
-      console.log('Open Modal')
+      this.$refs.settingsModal.show()
     }
   },
   computed: {
