@@ -16,10 +16,14 @@
 
 <script>
 import {ConfigRepository} from "@/resources/js/repositories/config-repository";
+import fab from 'vue-fab'
 
 
 export default {
   name: "ChairPrediction",
+  components: {
+    fab
+  },
   data () {
     return {
       items: [],
