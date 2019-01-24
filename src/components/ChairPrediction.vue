@@ -59,6 +59,7 @@ export default {
       this.ranks = total_ranks;
       this.mergeFields(num_ranks);
       this.createParties(parties, num_ranks);
+      window._.forEach(this.sItems, x => this.onBallotChange(null, x))
     },
     mergeFields (ranks) {
       let vm = this;
