@@ -46,7 +46,7 @@ export default {
       fields: [],
       numSplit: 0,
       ranks: 0,
-      modalState: false
+      modalState: true
     }
   },
   created () {
