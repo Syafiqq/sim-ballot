@@ -1,6 +1,13 @@
 <template lang="pug">
   div
     b-modal(ref='settingsModal', v-model='modalState' hide-header='')
+      b-form(horizontal='')
+        b-form-group(horizontal='' label='Kabupaten', label-for='form-district')
+          b-form-input#form-district(type='text', v-model='district', required='', placeholder='Masukkan Nama Kabupaten', autocomplete="nope")
+        b-form-group(horizontal='' label='Dapil', label-for='form-area')
+          b-form-input#form-area(type='text', v-model='area', required='', placeholder='Masukkan Nama Dapil', autocomplete="nope")
+        b-form-group(horizontal='' label='Jumlah Kursi', label-for='form-alloc')
+          b-form-input#form-alloc(type='number', v-model='ranks', required='', placeholder='Masukkan Jumlah Kursi')
       .w-100(slot='modal-footer')
         b-btn.float-left(size='sm', variant='primary', @click='modalState=false') Download
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
@@ -33,6 +40,8 @@ export default {
   },
   data () {
     return {
+      district: '',
+      area: '',
       items: [],
       fields: [],
       numSplit: 0,
