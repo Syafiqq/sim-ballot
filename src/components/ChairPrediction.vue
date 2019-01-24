@@ -1,6 +1,9 @@
 <template lang="pug">
   div
-    b-modal(ref='settingsModal', hide-footer='', hide-header='')
+    b-modal(ref='settingsModal', v-model='modalState' hide-header='')
+      .w-100(slot='modal-footer')
+        b-btn.float-left(size='sm', variant='primary', @click='modalState=false') Download
+        b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
@@ -34,6 +37,7 @@ export default {
       fields: [],
       numSplit: 0,
       ranks: 0,
+      modalState: false
     }
   },
   created () {
