@@ -13,7 +13,7 @@
           b-badge(v-if="data.value.position <= cRanks", variant='info', v-html="data.value.position_display", style="width:2.5em")
           div(v-else='')
           span.pl-3 {{data.value.value}}
-    fab(:actions='fabActions', main-icon='settings', @settings="openSettings")
+    fab(:actions="[]" main-icon='settings', @click.native="openSettings")
 </template>
 
 <script>
@@ -32,10 +32,6 @@ export default {
       fields: [],
       numSplit: 0,
       ranks: 0,
-      fabActions: [{
-        name: 'settings',
-        icon: 'settings'
-      }]
     }
   },
   created () {
