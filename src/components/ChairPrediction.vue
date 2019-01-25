@@ -46,7 +46,8 @@ export default {
       fields: [],
       numSplit: 0,
       ranks: 0,
-      modalState: true
+      modalState: true,
+      total:0,
     }
   },
   created () {
@@ -156,6 +157,8 @@ export default {
       window._.forEach(v.c, (v1) => {
         v1.value = Number(Math.round(v.ballot / (v1.rank * 2 - 1)));
       });
+      this.total = 0;
+      window._.forEach(this.sItems, x => this.total += x.ballot);
       this.onRanksChange();
     },
     openSettings () {
