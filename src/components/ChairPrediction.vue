@@ -9,7 +9,7 @@
         b-form-group(horizontal='' label='Jumlah Kursi', label-for='form-alloc')
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi')
       .w-100(slot='modal-footer')
-        b-btn.float-left(size='sm', variant='primary', @click='modalState=false') Download Laporan
+        b-btn.float-left(size='sm', variant='primary', @click='downloadReport()') Download Laporan
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
@@ -160,6 +160,66 @@ export default {
     },
     openSettings () {
       this.$refs.settingsModal.show()
+    },
+    downloadReport () {
+      let workbook = new window.ExcelJS.Workbook();
+      let worksheet = workbook.addWorksheet('Discography');
+
+      // add column headers
+      worksheet.columns = [
+        {header: 'Album', key: 'album'},
+        {header: 'Year', key: 'year'},
+        {header: 'Age', key: 'age'}
+      ];
+
+      // add row using keys
+      worksheet.addRow({album: "Taylor Swift", year: 2006, age: 20});
+
+      // add rows the dumb way
+      worksheet.addRow(["Fearless", 2008, 22]);
+
+      // add an array of rows
+      let rows = [
+        ["Speak Now", 2010, 30],
+        {album: "Red", year: 2012, age: 35}
+      ];
+      worksheet.addRows(rows);
+
+      // edit cells directly
+      worksheet.getCell('A6').value = "1989";
+      worksheet.getCell('B6').value = 2014;
+      worksheet.getCell('C6').value = 23;
+
+      worksheet.autoFilter = {
+        from: {
+          row: 1,
+          column: 1
+        },
+        to: {
+          row: 5,
+          column: 2
+        }
+      };
+
+      console.warn("create workbook###", workbook.xlsx);
+      // save workbook to disk
+      console.warn("savving###");
+
+      let path = "assets.xlsx";
+      let mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      workbook.xlsx.writeBuffer()
+        .then(function (data) {
+          console.log('Binary Buffer Opened');
+          console.log(data);
+
+          console.log('Creating blob');
+          let blob = new Blob([data], {type: mimeType});
+
+          console.log('Writing file to output/test.xlsx');
+
+          window.FileSaver.saveAs(blob, path);
+          console.log('File written!');
+        });
     }
   },
   computed: {
