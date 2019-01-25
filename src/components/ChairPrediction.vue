@@ -7,7 +7,7 @@
         b-form-group(horizontal='' label='Dapil', label-for='form-area')
           b-form-input#form-area(type='text', v-model='area', required='', placeholder='Masukkan Nama Dapil', autocomplete="nope")
         b-form-group(horizontal='' label='Jumlah Kursi', label-for='form-alloc')
-          b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi')
+          b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
         b-btn.float-left(size='sm', variant='primary', @click='modalState=false') Download Laporan
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
@@ -146,7 +146,10 @@ export default {
       while (process.length > 0) {
         process.pop()
       }
-      window._.forEach(this.items, v => {
+      this.calculateAllocation();
+    },
+    calculateAllocation(){
+      window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
         v.detail = window._.map(col, x => x.position_display);
