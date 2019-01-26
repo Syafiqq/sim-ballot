@@ -48,6 +48,7 @@ export default {
       ranks: 0,
       modalState: true,
       total: 0,
+      process: []
     }
   },
   created () {
@@ -123,11 +124,12 @@ export default {
       })
     },
     onRanksChange () {
-      //store value
-      let process = [];
+      while (this.process.length > 0) {
+        this.process.pop()
+      }
       window._.forEach(this.sItems, (v, k) => {
         let x = -1;
-        window._.forEach(v.c, (v1, k1) => process.push({
+        window._.forEach(v.c, (v1, k1) => this.process.push({
           b: v1.value,
           s0: k,
           s1: ++x,
@@ -136,7 +138,14 @@ export default {
       });
       //sort value
       let dr = 0, vr = Number.MIN_SAFE_INTEGER;
-      window._.forEach(window._.sortBy(process, x => -x.b, x => x.s1, x => x.s0), (v, k) => {
+      let proc = window._.sortBy(this.process, x => -x.b, x => x.s1, x => x.s0);
+      while (this.process.length > 0) {
+        this.process.pop()
+      }
+      while (proc.length > 0) {
+        this.process.unshift(proc.pop())
+      }
+      window._.forEach(this.process, (v, k) => {
         if (v.b !== vr) {
           vr = v.b;
           dr = k + 1
@@ -144,10 +153,10 @@ export default {
         this.items[v.s0]['c'][v.s2]['position'] = k + 1;
         this.items[v.s0]['c'][v.s2]['position_display'] = dr;
       });
-      while (process.length > 0) {
-        process.pop()
-      }
-      window._.forEach(this.items, v => {
+      this.calculateAllocation();
+    },
+    calculateAllocation () {
+      window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
         v.detail = window._.map(col, x => x.position_display);
