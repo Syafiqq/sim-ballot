@@ -472,7 +472,7 @@ export default {
 
       col = __jumpChar(col, 2);
       worksheet.getCell(`${col}${row}`).font = {bold: true};
-      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
       worksheet.getCell(`${col}${row}`).value = temp.ballots;
       worksheet.getCell(`${col}${row}`).border = {
         top: {style: 'thin'},
@@ -829,7 +829,7 @@ export default {
 
       col = __jumpChar(col, 2);
       worksheet.getCell(`${col}${row}`).font = {bold: true};
-      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
       worksheet.getCell(`${col}${row}`).value = 0;
       worksheet.getCell(`${col}${row}`).border = {
         top: {style: 'thin'},
