@@ -226,6 +226,13 @@ export default {
         }
         return true;
       };
+      let translate = (n) => {
+        if (n === 1) {
+          return 'Pertama';
+        } else {
+          return `Ke${window.IDT.translate(n.toString()).replace(' ', '').toLowerCase()}`
+        }
+      };
 
       const vm = this;
       let workbook = new window.ExcelJS.Workbook();
@@ -691,7 +698,164 @@ export default {
 
       col = __nextChar(col);
       worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
-      worksheet.getCell(`${col}${row}`).value = window._.join(window._.sortBy(window._.concat(window._.flatten(window._.map(vm.sItems, x => x.detail || [])))), ', ')|| '-';
+      worksheet.getCell(`${col}${row}`).value = window._.join(window._.sortBy(window._.concat(window._.flatten(window._.map(vm.sItems, x => x.detail || [])))), ', ') || '-';
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      // Worksheet
+      worksheet = workbook.addWorksheet('SUMMARY 2');
+      col = 'A';
+      row = 0;
+      worksheet.getColumn(col).width = __scale(3.5);
+      worksheet.getColumn(col = __nextChar(col)).width = __scale(25.06);
+      worksheet.getColumn(col = __nextChar(col)).width = __scale(25.06);
+
+      window._.forEach([['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
+        ++row;
+        worksheet.mergeCells(`A${row}:B${row}`);
+        worksheet.getCell(`A${row}:B${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        worksheet.getCell(`A${row}`).font = {bold: true};
+        worksheet.getCell(`A${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+        worksheet.getCell(`A${row}`).value = x[0];
+        worksheet.getCell(`C${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        worksheet.getCell(`C${row}`).font = {bold: true};
+        worksheet.getCell(`C${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+        worksheet.getCell(`C${row}`).value = x[1];
+        worksheet.getCell(`C${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFABF8F'},
+        };
+      });
+
+      worksheet.getRow(5).height = __scale(21.75);
+      worksheet.getRow(6).height = __scale(25.4);
+
+      row += 2;
+      col = '';
+      window._.forEach(['NO', 'KURSI', 'PARTAI'], x => {
+        col = __nextChar(col);
+        worksheet.mergeCells(`${col}${row}:${col}${row + 1}`);
+        worksheet.getCell(`${col}${row}`).font = {bold: true};
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = x;
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      });
+      ++row;
+
+      n = vm.cRanks;
+      while (--n >= 0) {
+        ++row;
+        col = '';
+        col = __nextChar(col);
+
+        worksheet.getRow(row).height = __scale(15);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = vm.cRanks - n;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFFFF00'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = `Kursi ${translate(vm.cRanks - n)}`;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFFFF00'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = vm.items[vm.process[vm.cRanks - n - 1].s0].party;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FF00b050'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      }
+
+      ++row;
+      col = '';
+      col = __nextChar(col);
+      worksheet.mergeCells(`${col}${row}:${__nextChar(col)}${row}`);
+      worksheet.getCell(`${col}${row}:${__nextChar(col)}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'Total';
+
+      col = __jumpChar(col, 2);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 0;
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      ++row;
+      col = '';
+      col = __nextChar(col);
+      worksheet.mergeCells(`${col}${row}:${__nextChar(col)}${row}`);
+      worksheet.getCell(`${col}${row}:${__nextChar(col)}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'Kursi';
+
+      col = __jumpChar(col, 2);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = vm.cRanks;
       worksheet.getCell(`${col}${row}`).border = {
         top: {style: 'thin'},
         left: {style: 'thin'},
