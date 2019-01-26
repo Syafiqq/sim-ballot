@@ -397,7 +397,7 @@ export default {
 
         temp.ballots += Number(v.ballot);
         col = __nextChar(col);
-        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
         worksheet.getCell(`${col}${row}`).value = Number(v.ballot);
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
@@ -625,8 +625,8 @@ export default {
         };
 
         col = __nextChar(col);
-        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = v.ballot;
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = Number(v.ballot);
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
           pattern: 'solid',
