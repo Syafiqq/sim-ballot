@@ -398,7 +398,7 @@ export default {
         temp.ballots += v.ballot;
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = v.ballot;
+        worksheet.getCell(`${col}${row}`).value = Number(v.ballot);
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
           pattern: 'solid',
