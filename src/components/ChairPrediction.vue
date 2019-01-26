@@ -599,7 +599,7 @@ export default {
         };
       });
 
-      ++row
+      ++row;
       window._.forEach(vm.sItems, (v, k) => {
         ++row;
         col = '';
@@ -863,25 +863,12 @@ export default {
         right: {style: 'thin'}
       };
 
-
-      console.warn("create workbook###", workbook.xlsx);
-      // save workbook to disk
-      console.warn("savving###");
-
-      let path = "assets.xlsx";
+      let path = 'Laporan.xlsx';
       let mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
       workbook.xlsx.writeBuffer()
         .then(function (data) {
-          console.log('Binary Buffer Opened');
-          console.log(data);
-
-          console.log('Creating blob');
           let blob = new Blob([data], {type: mimeType});
-
-          console.log('Writing file to output/test.xlsx');
-
           window.FileSaver.saveAs(blob, path);
-          console.log('File written!');
         });
     }
   },
