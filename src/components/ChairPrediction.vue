@@ -395,7 +395,7 @@ export default {
           right: {style: 'thin'}
         };
 
-        temp.ballots += v.ballot;
+        temp.ballots += Number(v.ballot);
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
         worksheet.getCell(`${col}${row}`).value = Number(v.ballot);
