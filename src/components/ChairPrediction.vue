@@ -47,7 +47,7 @@ export default {
       numSplit: 0,
       ranks: 0,
       modalState: true,
-      total:0,
+      total: 0,
     }
   },
   created () {
@@ -165,43 +165,365 @@ export default {
       this.$refs.settingsModal.show()
     },
     downloadReport () {
-      let workbook = new window.ExcelJS.Workbook();
-      let worksheet = workbook.addWorksheet('Discography');
-
-      // add column headers
-      worksheet.columns = [
-        {header: 'Album', key: 'album'},
-        {header: 'Year', key: 'year'},
-        {header: 'Age', key: 'age'}
-      ];
-
-      // add row using keys
-      worksheet.addRow({album: "Taylor Swift", year: 2006, age: 20});
-
-      // add rows the dumb way
-      worksheet.addRow(["Fearless", 2008, 22]);
-
-      // add an array of rows
-      let rows = [
-        ["Speak Now", 2010, 30],
-        {album: "Red", year: 2012, age: 35}
-      ];
-      worksheet.addRows(rows);
-
-      // edit cells directly
-      worksheet.getCell('A6').value = "1989";
-      worksheet.getCell('B6').value = 2014;
-      worksheet.getCell('C6').value = 23;
-
-      worksheet.autoFilter = {
-        from: {
-          row: 1,
-          column: 1
-        },
-        to: {
-          row: 5,
-          column: 2
+      let __scale = x => x * 1.1;
+      let __jumpChar = (c, n = 1) => {
+        let r = c;
+        while (--n >= 0) {
+          r = __nextChar(r)
         }
+        return r;
+      };
+      let __nextChar = c => {
+        if (c === '') {
+          return 'A';
+        }
+        const u = c.toUpperCase();
+        if (same(u, 'Z')) {
+          let txt = '';
+          let i = u.length;
+          while (i--) {
+            txt += 'A';
+          }
+          return (txt + 'A');
+        } else {
+          let p = "";
+          let q = "";
+          if (u.length > 1) {
+            p = u.substring(0, u.length - 1);
+            q = String.fromCharCode(p.slice(-1).charCodeAt(0));
+          }
+          const l = u.slice(-1).charCodeAt(0);
+          const z = nextLetter(l);
+          if (z === 'A') {
+            return p.slice(0, -1) + nextLetter(q.slice(-1).charCodeAt(0)) + z;
+          } else {
+            return p + z;
+          }
+        }
+      };
+      let nextLetter = l => {
+        if (l < 90) {
+          return String.fromCharCode(l + 1);
+        } else {
+          return 'A';
+        }
+      };
+      let same = (str, char) => {
+        let i = str.length;
+        while (i--) {
+          if (str[i] !== char) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      const vm = this;
+      let workbook = new window.ExcelJS.Workbook();
+      //Entry SAINTE LAGUE
+      let worksheet = workbook.addWorksheet('Entry SAINTE LAGUE');
+      let col = 'A';
+      let row = 0;
+      worksheet.getColumn(col).width = __scale(3.5);
+      worksheet.getColumn(col = __nextChar(col)).width = __scale(15.54);
+      worksheet.getColumn(col = __nextChar(col)).width = __scale(25.06);
+      let n = vm.numSplit;
+      while (--n >= 0) {
+        worksheet.getColumn(col = __nextChar(col)).width = __scale(9.05);
+        worksheet.getColumn(col = __nextChar(col)).width = __scale(4.77);
+      }
+      worksheet.getColumn(col = __nextChar(col)).width = __scale(15.71);
+
+      window._.forEach([['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
+        ++row;
+        worksheet.mergeCells(`A${row}:B${row}`);
+        worksheet.getCell(`A${row}:B${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        worksheet.getCell(`A${row}`).font = {bold: true};
+        worksheet.getCell(`A${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+        worksheet.getCell(`A${row}`).value = x[0];
+        worksheet.getCell(`A${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFFFF00'},
+        };
+        worksheet.getCell(`C${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        worksheet.getCell(`C${row}`).font = {bold: true};
+        worksheet.getCell(`C${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+        worksheet.getCell(`C${row}`).value = x[1];
+        worksheet.getCell(`C${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FF00b050'},
+        };
+      });
+
+      worksheet.getRow(5).height = __scale(21.75);
+      worksheet.getRow(6).height = __scale(25.4);
+
+      row += 2;
+      col = '';
+      window._.forEach(['NO', 'PARTAI POLITIK', 'JUMLAH PEROLEHAN SUARA'], x => {
+        col = __nextChar(col);
+        worksheet.mergeCells(`${col}${row}:${col}${row + 1}`);
+        worksheet.getCell(`${col}${row}`).font = {bold: true};
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = x;
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      });
+
+      col = __nextChar(col);
+      let sum = vm.sItems.length * 2;
+      worksheet.mergeCells(`${col}${row}:${__jumpChar(col, sum)}${row}`);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'SAINTE LAGUE (Pembagi )';
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      ++row;
+      col = 'C';
+      n = vm.numSplit;
+      while (--n >= 0) {
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).font = {bold: true};
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = `${(vm.numSplit - n) * 2 - 1}`;
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).font = {bold: true};
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = 'R';
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      }
+
+      col = __nextChar(col);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'PEROLEHAN KURSI AKHIR';
+      worksheet.getCell(`${col}${row}`).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: {argb: 'FFB7DEE8'},
+      };
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      let temp = {
+        ballots: 0,
+        c: {},
+      };
+      window._.forEach(vm.sItems, (v, k) => {
+        ++row;
+        col = '';
+        col = __nextChar(col);
+
+        worksheet.getRow(row).height = __scale(15);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = k + 1;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFFFF00'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = `${v.party}`;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFFFFF00'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+
+        temp.ballots += v.ballot;
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = v.ballot;
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FF00b050'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+
+        window._.forEach(v.c, (v1, k1) => {
+          if (!(k1 in temp.c))
+            temp.c[k1] = 0;
+
+          col = __nextChar(col);
+          worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+          worksheet.getCell(`${col}${row}`).value = v1.value;
+          worksheet.getCell(`${col}${row}`).border = {
+            top: {style: 'thin'},
+            left: {style: 'thin'},
+            bottom: {style: 'thin'},
+            right: {style: 'thin'}
+          };
+
+          col = __nextChar(col);
+          if (v1.position <= vm.cRanks) {
+            ++temp.c[k1];
+            worksheet.getCell(`${col}${row}`).font = {color: {argb: 'FF00b050'}};
+            worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+            worksheet.getCell(`${col}${row}`).value = v1.position_display;
+          }
+          worksheet.getCell(`${col}${row}`).border = {
+            top: {style: 'thin'},
+            left: {style: 'thin'},
+            bottom: {style: 'thin'},
+            right: {style: 'thin'}
+          };
+        });
+
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = (v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-';
+        worksheet.getCell(`${col}${row}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: {argb: 'FFB7DEE8'},
+        };
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      });
+
+      ++row;
+      col = '';
+      col = __nextChar(col);
+      worksheet.mergeCells(`${col}${row}:${__nextChar(col)}${row}`);
+      worksheet.getCell(`${col}${row}:${__nextChar(col)}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'Total';
+
+      col = __jumpChar(col, 2);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = temp.ballots;
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      window._.forEach(temp.c, (v1) => {
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+
+        col = __nextChar(col);
+        worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
+        worksheet.getCell(`${col}${row}`).value = v1;
+        worksheet.getCell(`${col}${row}`).border = {
+          top: {style: 'thin'},
+          left: {style: 'thin'},
+          bottom: {style: 'thin'},
+          right: {style: 'thin'}
+        };
+      });
+
+      col = __nextChar(col);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = vm.cRanks;
+      worksheet.getCell(`${col}${row}`).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: {argb: 'FFB7DEE8'},
+      };
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+
+      ++row;
+      col = '';
+      col = __nextChar(col);
+      worksheet.mergeCells(`${col}${row}:${__nextChar(col)}${row}`);
+      worksheet.getCell(`${col}${row}:${__nextChar(col)}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
+      };
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'left', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = 'Kursi';
+
+      col = __jumpChar(col, 2);
+      worksheet.getCell(`${col}${row}`).font = {bold: true};
+      worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
+      worksheet.getCell(`${col}${row}`).value = vm.cRanks;
+      worksheet.getCell(`${col}${row}`).border = {
+        top: {style: 'thin'},
+        left: {style: 'thin'},
+        bottom: {style: 'thin'},
+        right: {style: 'thin'}
       };
 
       console.warn("create workbook###", workbook.xlsx);
