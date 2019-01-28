@@ -256,7 +256,7 @@ export default {
       }
       worksheet.getColumn(col = __nextChar(col)).width = __scale(15.71);
 
-      window._.forEach([['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
+      window._.forEach([['Partai', vm.party], ['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
         ++row;
         worksheet.mergeCells(`A${row}:B${row}`);
         worksheet.getCell(`A${row}:B${row}`).border = {
@@ -558,7 +558,7 @@ export default {
       worksheet.getColumn(col = __nextChar(col)).width = __scale(15.71);
       worksheet.getColumn(col = __nextChar(col)).width = __scale(40);
 
-      window._.forEach([['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
+      window._.forEach([['Partai', vm.party], ['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
         ++row;
         worksheet.mergeCells(`A${row}:B${row}`);
         worksheet.getCell(`A${row}:B${row}`).border = {
@@ -720,7 +720,7 @@ export default {
       worksheet.getColumn(col = __nextChar(col)).width = __scale(25.06);
       worksheet.getColumn(col = __nextChar(col)).width = __scale(25.06);
 
-      window._.forEach([['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
+      window._.forEach([['Partai', vm.party], ['Kabupaten', vm.district], ['Dapil', vm.area], ['Alokasi Kursi', vm.cRanks]], x => {
         ++row;
         worksheet.mergeCells(`A${row}:B${row}`);
         worksheet.getCell(`A${row}:B${row}`).border = {
