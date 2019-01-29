@@ -232,7 +232,7 @@ export default {
         if (n === 1) {
           return 'Pertama';
         } else {
-          return `Ke${window.IDT.translate(n.toString()).replace(/\s/g, '').toLowerCase()}`
+          return `Ke${window.IDT.translate(n.toString()).toLowerCase()}`
         }
       };
 
