@@ -12,8 +12,8 @@
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
         b-button-group
-          b-dropdown.float-left(size='sm', variant='primary', right='', split='', text='Download Laporan XLS', @click='downloadReport()')
-            b-dropdown-item(size='sm', variant='primary', @click='downloadReport()') Download PDF
+          b-dropdown.float-left(size='sm', variant='primary', right='', split='', text='Download Laporan XLS', @click='downloadReportXls()')
+            b-dropdown-item(size='sm', variant='primary', @click='downloadReportXls()') Download PDF
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
@@ -177,7 +177,7 @@ export default {
     openSettings () {
       this.$refs.settingsModal.show()
     },
-    downloadReport () {
+    downloadReportXls () {
       let __scale = x => x * 1.1;
       let __jumpChar = (c, n = 1) => {
         let r = c;
