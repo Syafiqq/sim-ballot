@@ -11,7 +11,9 @@
         b-form-group(horizontal='' label='Jumlah Kursi', label-for='form-alloc')
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
-        b-btn.float-left(size='sm', variant='primary', @click='downloadReport()') Download Laporan
+        b-button-group
+          b-dropdown.float-left(size='sm', variant='primary', right='', split='', text='Download Laporan XLS', @click='downloadReport()')
+            b-dropdown-item(size='sm', variant='primary', @click='downloadReport()') Download PDF
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
