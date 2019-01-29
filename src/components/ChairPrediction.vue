@@ -153,6 +153,11 @@ export default {
       this.calculateAllocation();
     },
     calculateAllocation(){
+      let max = this.sItems.length * this.numSplit;
+      if (this.ranks > (max))
+        this.ranks = max;
+      if (this.ranks < 0)
+        this.ranks = 0;
       window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
