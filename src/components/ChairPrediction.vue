@@ -22,11 +22,9 @@
           div(v-else='')
       template(slot='ballot', slot-scope='data')
         input.form-control-sm(type='number', style='width:8em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
-      template(v-for="item in cNumSplit", v-bind:slot="item", slot-scope='data')
-        .d-flex.justify-content-between
-          b-badge(v-if="data.value.position <= cRanks", variant='info', v-html="data.value.position_display", style="width:2.5em")
-          div(v-else='')
-          span.pl-3 {{data.value.value}}
+      template(slot='detail', slot-scope='data')
+        b-badge(v-for="d in data.value", variant='info', style="width:2.5em; margin:0 8px")
+          span.font-xl {{d}}
     fab(:actions="[]" main-icon='settings', @click.native="openSettings")
 </template>
 
@@ -65,11 +63,11 @@ export default {
       this.ranks = total_ranks;
       this.parties = parties;
       this.party = this.parties[0];
-      this.mergeFields(num_ranks);
+      this.mergeFields();
       this.createParties(parties, num_ranks);
       window._.forEach(this.sItems, x => this.onBallotChange(null, x))
     },
-    mergeFields (ranks) {
+    mergeFields () {
       let vm = this;
       let fields = [{
         key: 'no',
@@ -85,17 +83,10 @@ export default {
         label: 'Suara',
         thStyle: {width: '100px'},
         tdClass: ['bg-ballot']
-      }
-      ];
-      window._.forEach(window._.range(1, ranks + 1), (value) => {
-        fields.push({
-          key: `c.r${value}`,
-          label: `${value * 2 - 1}`,
-          thStyle: {width: '80px'},
-          tdClass: ['text-left'],
-          thClass: ['text-center']
-        })
-      });
+      }, {
+        key: 'detail',
+        label: 'Alokasi Kursi',
+      }];
       while (vm.fields.length > 0) {
         vm.fields.pop();
       }
