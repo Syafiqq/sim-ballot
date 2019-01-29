@@ -177,6 +177,13 @@ export default {
     openSettings () {
       this.$refs.settingsModal.show()
     },
+    translate (n) {
+      if (n === 1) {
+        return 'Pertama';
+      } else {
+        return `Ke${window.IDT.translate(n.toString()).toLowerCase()}`
+      }
+    },
     downloadReportXls () {
       let __scale = x => x * 1.1;
       let __jumpChar = (c, n = 1) => {
@@ -229,13 +236,6 @@ export default {
           }
         }
         return true;
-      };
-      let translate = (n) => {
-        if (n === 1) {
-          return 'Pertama';
-        } else {
-          return `Ke${window.IDT.translate(n.toString()).toLowerCase()}`
-        }
       };
 
       const vm = this;
@@ -500,7 +500,7 @@ export default {
         };
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = `Kursi ${translate(vm.cRanks - n)}`;
+        worksheet.getCell(`${col}${row}`).value = `Kursi ${vm.translate(vm.cRanks - n)}`;
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
           pattern: 'solid',
