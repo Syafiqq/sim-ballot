@@ -189,11 +189,31 @@ export default {
       let d = (t, b = false, s = 10, p = 0) => {
         return {text: t, fontSize: s, bold: b, alignment: p === 0 ? 'left' : (p === 1 ? 'center' : 'right')}
       };
+      const gtwk2 = () => {
+        let ar = [];
+        ar.push([d('NO', true, 12, 1), d('KURSI', true, 12, 1), d('PARTAI', true, 12, 1)]);
+        let n = vm.cRanks;
+        while (--n >= 0) {
+          ar.push([d(vm.cRanks - n, false, 12, 2), d(`Kursi ${vm.translate(vm.cRanks - n)}`, false, 12, 0), d(vm.items[vm.process[vm.cRanks - n - 1].s0].party, false, 12, 0)]);
+        }
+        ar.push([
+          {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
+          {},
+          d(0, false, 12, 2)]);
+        ar.push([
+          {text: 'Kursi', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
+          {},
+          d(vm.cRanks, false, 12, 2)]);
+        return {
+          widths: [25, '*', '*'],
+          body: ar
+        }
+      };
       const gtwk1 = (_t) => {
         let ar = [];
         ar.push([d('NO', true, 12, 1), d('PARTAI POLITIK', true, 12, 1), d('JUMLAH PEROLEAHAN SUARA', true, 12, 1), d('PEROLEHAN KURSI SAINTE LAGUE', true, 12, 1), d('PESEBARAN URUTAN', true, 12, 1)]);
         window._.forEach(vm.sItems, (v, k) => {
-          ar.push([d(k + 1, false, 12, 0), d(`${v.party}`, false, 12, 0), d(Number(v.ballot), false, 12, 2), d((v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-', false, 12, 2), d((v.detail == null || v.detail.length <= 0) ? '-' : window._.join(v.detail, ', '), false, 12, 2)]);
+          ar.push([d(k + 1, false, 12, 2), d(`${v.party}`, false, 12, 0), d(Number(v.ballot), false, 12, 2), d((v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-', false, 12, 2), d((v.detail == null || v.detail.length <= 0) ? '-' : window._.join(v.detail, ', '), false, 12, 2)]);
         });
         ar.push([
           {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
@@ -265,6 +285,22 @@ export default {
           {text: ' ', style: 'header'},
           {
             table: gtwk1(temp)
+          },
+          {text: '', pageOrientation: 'portrait', pageBreak: 'after'},
+          {
+            table: {
+              widths: [100, 150],
+              body: [
+                [d('Partai', true), d(vm.party)],
+                [d('Kabupaten', true), d(vm.district)],
+                [d('Dapil', true), d(vm.area)],
+                [d('Alokasi Kursi', true), d(vm.cRanks)]
+              ]
+            }
+          },
+          {text: ' ', style: 'header'},
+          {
+            table: gtwk2(temp)
           },
         ]
       };
