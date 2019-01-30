@@ -186,9 +186,40 @@ export default {
     },
     downloadReportPdf () {
       const vm = this;
-      let d = (t, b = false, s = 10) => {
-        return {text: t, fontSize: s, bold: b}
+      let d = (t, b = false, s = 10, p = 0) => {
+        return {text: t, fontSize: s, bold: b, alignment: p === 0 ? 'left' : (p === 1 ? 'center' : 'right')}
       };
+      const gtwk1 = (_t) => {
+        let ar = [];
+        ar.push([d('NO', true, 12, 1), d('PARTAI POLITIK', true, 12, 1), d('JUMLAH PEROLEAHAN SUARA', true, 12, 1), d('PEROLEHAN KURSI SAINTE LAGUE', true, 12, 1), d('PESEBARAN URUTAN', true, 12, 1)]);
+        window._.forEach(vm.sItems, (v, k) => {
+          ar.push([d(k + 1, false, 12, 0), d(`${v.party}`, false, 12, 0), d(Number(v.ballot), false, 12, 2), d((v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-', false, 12, 2), d((v.detail == null || v.detail.length <= 0) ? '-' : window._.join(v.detail, ', '), false, 12, 2)]);
+        });
+        ar.push([
+          {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
+          {},
+          d(_t.ballots + "", false, 12, 2),
+          d(vm.cRanks + "", false, 12, 2),
+          d(window._.join(window._.sortBy(window._.concat(window._.flatten(window._.map(vm.sItems, x => x.detail || [])))), ', ') || '-', false, 12, 2)]);
+        return {
+          widths: [25, 150, 120, 120, '*'],
+          body: ar
+        }
+      };
+      let temp = {
+        ballots: 0,
+        c: {},
+      };
+      window._.forEach(vm.sItems, (v) => {
+        temp.ballots += Number(v.ballot);
+        window._.forEach(v.c, (v1, k1) => {
+          if (!(k1 in temp.c))
+            temp.c[k1] = 0;
+          if (v1.position <= vm.cRanks) {
+            ++temp.c[k1];
+          }
+        });
+      });
       let docDefinition = {
         pageSize: 'A4',
         pageOrientation: 'landscape',
@@ -232,20 +263,8 @@ export default {
             }
           },
           {text: ' ', style: 'header'},
-          {text: ' ', style: 'header'},
           {
-            table: {
-              widths: [25, 150, 120, 120, '*'],
-              heights: (row) => {
-                if (row === 0)
-                  return 40;
-                else
-                  return 'auto';
-              },
-              body: [
-                [d('NO', true, 12), d('PARTAI POLITIK', true, 12), d('JUMLAH PEROLEAHAN SUARA', true, 12), d('PEROLEHAN KURSI SAINTE LAGUE', true, 12), d('PESEBARAN URUTAN', true, 12)],
-              ]
-            }
+            table: gtwk1(temp)
           },
         ]
       };
