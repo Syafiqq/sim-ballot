@@ -13,7 +13,7 @@
       .w-100(slot='modal-footer')
         b-button-group
           b-dropdown.float-left(size='sm', variant='primary', right='', split='', text='Download Laporan XLS', @click='downloadReportXls()')
-            b-dropdown-item(size='sm', variant='primary', @click='downloadReportXls()') Download PDF
+            b-dropdown-item(size='sm', variant='primary', @click='downloadReportPdf()') Download PDF
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
@@ -183,6 +183,76 @@ export default {
       } else {
         return `Ke${window.IDT.translate(n.toString()).toLowerCase()}`
       }
+    },
+    downloadReportPdf () {
+      const vm = this;
+      let d = (t, b = false, s = 10) => {
+        return {text: t, fontSize: s, bold: b}
+      };
+      let docDefinition = {
+        pageSize: 'A4',
+        pageOrientation: 'landscape',
+        pageMargins: [60, 40, 40, 40],
+        compress: false,
+        info: {
+          title: 'Laporan',
+          author: 'SIM Pemilukada',
+          subject: 'Laporan SIM Pemilukada',
+          keywords: 'Laporan SIM Pemilukada',
+          creator: 'SIM Pemilukada',
+          producer: 'SIM Pemilukada',
+        },
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 10, 0, 0]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+        content: [
+          {
+            table: {
+              widths: [100, 150],
+              body: [
+                [d('Partai', true), d(vm.party)],
+                [d('Kabupaten', true), d(vm.district)],
+                [d('Dapil', true), d(vm.area)],
+                [d('Alokasi Kursi', true), d(vm.cRanks)]
+              ]
+            }
+          },
+          {text: ' ', style: 'header'},
+          {text: ' ', style: 'header'},
+          {
+            table: {
+              widths: [25, 150, 120, 120, '*'],
+              heights: (row) => {
+                if (row === 0)
+                  return 40;
+                else
+                  return 'auto';
+              },
+              body: [
+                [d('NO', true, 12), d('PARTAI POLITIK', true, 12), d('JUMLAH PEROLEAHAN SUARA', true, 12), d('PEROLEHAN KURSI SAINTE LAGUE', true, 12), d('PESEBARAN URUTAN', true, 12)],
+              ]
+            }
+          },
+        ]
+      };
+      const pdfDocGenerator = window.pdfMake.createPdf(docDefinition);
+      pdfDocGenerator.getBlob((blob) => {
+        window.FileSaver.saveAs(blob, `${docDefinition.info.title}.pdf`);
+      });
     },
     downloadReportXls () {
       let __scale = x => x * 1.1;
