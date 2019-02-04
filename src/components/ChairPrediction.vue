@@ -18,10 +18,7 @@
       div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
-        .d-flex.justify-content-between
-          span.pr-3 {{data.value}}
-          b-badge(v-if="data.item.alloc > 0", variant='primary', style="width:2.5em") {{data.item.alloc}}
-          div(v-else='')
+        span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
         input.form-control-sm(type='number', style='width:8em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
       template(slot='detail', slot-scope='data')
