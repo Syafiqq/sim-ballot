@@ -12,7 +12,6 @@
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
         b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
-      div
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
