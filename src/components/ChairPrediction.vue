@@ -24,7 +24,7 @@
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px")
           span.font-xl {{d}}
-    fab(:actions="[]" main-icon='settings', @click.native="openSettings")
+    fab(:actions="fabs", main-icon='menu', @setting="openSettings")
 </template>
 
 <script>
@@ -49,7 +49,17 @@ export default {
       ranks: 0,
       modalState: true,
       total: 0,
-      process: []
+      process: [],
+      fabs: [
+        {
+          name: 'report',
+          icon: 'chrome_reader_mode'
+        },
+        {
+          name: 'setting',
+          icon: 'settings'
+        }
+      ]
     }
   },
   created () {
