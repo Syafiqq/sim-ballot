@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    b-modal(ref='settingsModal', v-model='modalState' hide-header='')
+    b-modal(ref='settingsModal', v-model='settingModalState' hide-header='')
       b-form(horizontal='')
         b-form-group(horizontal='' label='Partai', label-for='form-party')
           b-form-select#form-party(v-model='party', :options='parties')
@@ -11,7 +11,7 @@
         b-form-group(horizontal='' label='Jumlah Kursi', label-for='form-alloc')
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
-        b-btn.float-right(size='sm', variant='danger', @click='modalState=false') Close
+        b-btn.float-right(size='sm', variant='danger', @click='settingModalState=false') Close
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
@@ -43,7 +43,7 @@ export default {
       fields: [],
       numSplit: 0,
       ranks: 0,
-      modalState: true,
+      settingModalState: true,
       total: 0,
       process: [],
       fabs: [
