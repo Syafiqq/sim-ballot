@@ -16,7 +16,7 @@
       .w-100(slot='modal-footer')
         b-btn(size='sm', variant='primary',  @click='downloadReportXls()') Download XLS
         b-btn.float-right(size='sm', variant='primary', @click='downloadReportPdf()') Download PDF
-    b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
+    b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='smFields')
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
@@ -43,8 +43,8 @@ export default {
       party: '',
       district: '',
       area: '',
-      items: [],
-      fields: [],
+      mItems: [],
+      mFields: [],
       numSplit: 0,
       ranks: 0,
       settingModalState: true,
@@ -97,18 +97,18 @@ export default {
         key: 'detail',
         label: 'Alokasi Kursi',
       }];
-      while (vm.fields.length > 0) {
-        vm.fields.pop();
+      while (vm.mFields.length > 0) {
+        vm.mFields.pop();
       }
       window._.forEach(fields, (value) => {
-        vm.fields.push(value);
+        vm.mFields.push(value);
       })
     },
     createParties (parties, ranks) {
       let vm = this;
       const max = parties.length * ranks * 10;
-      while (vm.items.length > 0) {
-        vm.items.pop();
+      while (vm.mItems.length > 0) {
+        vm.mItems.pop();
       }
       window._.forEach(parties, (v, k) => {
         let item = {
@@ -127,7 +127,7 @@ export default {
             value: 0,
           };
         });
-        vm.items.push(item)
+        vm.mItems.push(item)
       })
     },
     onRanksChange () {
@@ -157,8 +157,8 @@ export default {
           vr = v.b;
           dr = k + 1
         }
-        this.items[v.s0]['c'][v.s2]['position'] = k + 1;
-        this.items[v.s0]['c'][v.s2]['position_display'] = dr;
+        this.mItems[v.s0]['c'][v.s2]['position'] = k + 1;
+        this.mItems[v.s0]['c'][v.s2]['position_display'] = dr;
       });
       this.calculateAllocation();
     },
@@ -205,7 +205,7 @@ export default {
         ar.push([d('NO', true, 12, 1), d('KURSI', true, 12, 1), d('PARTAI', true, 12, 1)]);
         let n = vm.cRanks;
         while (--n >= 0) {
-          ar.push([d(vm.cRanks - n, false, 12, 2), d(`Kursi ${vm.translate(vm.cRanks - n)}`, false, 12, 0), d(vm.items[vm.process[vm.cRanks - n - 1].s0].party, false, 12, 0)]);
+          ar.push([d(vm.cRanks - n, false, 12, 2), d(`Kursi ${vm.translate(vm.cRanks - n)}`, false, 12, 0), d(vm.mItems[vm.process[vm.cRanks - n - 1].s0].party, false, 12, 0)]);
         }
         ar.push([
           {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
@@ -651,7 +651,7 @@ export default {
 
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = vm.items[vm.process[vm.cRanks - n - 1].s0].party;
+        worksheet.getCell(`${col}${row}`).value = vm.mItems[vm.process[vm.cRanks - n - 1].s0].party;
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
           pattern: 'solid',
@@ -725,11 +725,11 @@ export default {
     }
   },
   computed: {
-    sFields () {
-      return this.fields
+    smFields () {
+      return this.mFields
     },
     sItems () {
-      return this.items
+      return this.mItems
     },
     cNumSplit () {
       return window._.map(window._.range(1, this.numSplit + 1), x => `c.r${x}`);
