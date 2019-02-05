@@ -12,6 +12,10 @@
           b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
         b-btn.float-right(size='sm', variant='danger', @click='settingModalState=false') Close
+    b-modal(ref='reportModal', size='lg', v-model='reportModalState' hide-header='')
+      .w-100(slot='modal-footer')
+        b-btn(size='sm', variant='primary',  @click='downloadReportXls()') Download XLS
+        b-btn.float-right(size='sm', variant='primary', @click='downloadReportPdf()') Download PDF
     b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='sFields')
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
@@ -20,7 +24,7 @@
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px")
           span.font-xl {{d}}
-    fab(:actions="fabs", main-icon='menu', @setting="openSettings")
+    fab(:actions="fabs", main-icon='menu', @setting="openSettings", @report="openReport")
 </template>
 
 <script>
@@ -44,6 +48,7 @@ export default {
       numSplit: 0,
       ranks: 0,
       settingModalState: true,
+      reportModalState: false,
       total: 0,
       process: [],
       fabs: [
@@ -179,6 +184,9 @@ export default {
     },
     openSettings () {
       this.$refs.settingsModal.show()
+    },
+    openReport () {
+      this.$refs.reportModal.show()
     },
     translate (n) {
       if (n === 1) {
