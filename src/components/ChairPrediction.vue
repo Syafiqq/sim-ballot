@@ -34,6 +34,11 @@
             template(slot='detail', slot-scope='data')
               span(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px") {{d}}
         b-tab(title='Summary 2')
+          b-table(responsive='', bordered='', outlined='', hover='', small='', :items='csRanks', :fields='ss2Fields')
+            template(slot='x', slot-scope='data')
+              span.pr-3 {{`Kursi ${translate(data.item.no)}`}}
+            template(slot='y', slot-scope='data')
+              span.pr-3 {{mItems[process[data.item.no - 1].s0].party}}
       dl.row
         dt.col-sm-4 Total Surat Suara
         dd.col-sm-8 {{cSumBallots}}
@@ -134,6 +139,7 @@ export default {
       window._.forEach([{
         key: 'no',
         label: 'NO',
+        thStyle: {width: '50px'}
       }, {
         key: 'party',
         label: 'PARTAI POLITIK',
@@ -152,7 +158,21 @@ export default {
         tdClass: ['text-right']
       }], (value) => {
         vm.s1Fields.push(value);
-      })
+      }),
+        window._.forEach([{
+          key: 'no',
+          label: 'NO',
+          thStyle: {width: '50px'}
+        }, {
+          key: 'x',
+          label: 'KURSI',
+        }, {
+          key: 'y',
+          label: 'PARTAI',
+          tdClass: ['text-uppercase']
+        }], (value) => {
+          vm.s2Fields.push(value);
+        })
     },
     createParties (parties, ranks) {
       let vm = this;
@@ -781,6 +801,9 @@ export default {
     ss1Fields () {
       return this.s1Fields
     },
+    ss2Fields () {
+      return this.s2Fields
+    },
     sItems () {
       return this.mItems
     },
@@ -792,6 +815,11 @@ export default {
     },
     cRanks () {
       return this.ranks;
+    },
+    csRanks () {
+      return window._.map(window._.range(1, Number(this.cRanks) + 1), x => {
+        return {no: x}
+      })
     }
   },
 }
