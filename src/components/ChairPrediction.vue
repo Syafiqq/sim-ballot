@@ -13,6 +13,32 @@
       .w-100(slot='modal-footer')
         b-btn.float-right(size='sm', variant='danger', @click='settingModalState=false') Close
     b-modal(ref='reportModal', size='lg', v-model='reportModalState' hide-header='')
+      dl.row
+        dt.col-sm-3 Partai
+        dd.col-sm-9 {{party}}
+        dt.col-sm-3 Kabupaten
+        dd.col-sm-9 {{district}}
+        dt.col-sm-3 Dapil
+        dd.col-sm-9 {{area}}
+        dt.col-sm-3 Jumlah Kursi
+        dd.col-sm-9 {{ranks}}
+      b-tabs
+        b-tab(title='Summary 1', active='')
+          b-table(responsive='', bordered='', outlined='', hover='', small='', :items='sItems', :fields='ss1Fields')
+            template(slot='party', slot-scope='data')
+              span.pr-3 {{data.value}}
+            template(slot='ballot', slot-scope='data')
+              span.pr-3 {{data.value}}
+            template(slot='alloc', slot-scope='data')
+              span.pr-3 {{data.value}}
+            template(slot='detail', slot-scope='data')
+              span(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px") {{d}}
+        b-tab(title='Summary 2')
+      dl.row
+        dt.col-sm-4 Total Surat Suara
+        dd.col-sm-8 {{cSumBallots}}
+        dt.col-sm-4 Total Kursi
+        dd.col-sm-8 {{ranks}}
       .w-100(slot='modal-footer')
         b-btn(size='sm', variant='primary',  @click='downloadReportXls()') Download XLS
         b-btn.float-right(size='sm', variant='primary', @click='downloadReportPdf()') Download PDF
@@ -45,6 +71,8 @@ export default {
       area: '',
       mItems: [],
       mFields: [],
+      s1Fields: [],
+      s2Fields: [],
       numSplit: 0,
       ranks: 0,
       settingModalState: true,
@@ -102,6 +130,28 @@ export default {
       }
       window._.forEach(fields, (value) => {
         vm.mFields.push(value);
+      });
+      window._.forEach([{
+        key: 'no',
+        label: 'NO',
+      }, {
+        key: 'party',
+        label: 'PARTAI POLITIK',
+        tdClass: ['text-uppercase']
+      }, {
+        key: 'ballot',
+        label: 'JUMLAH SUARA',
+        tdClass: ['text-right']
+      }, {
+        key: 'alloc',
+        label: 'PEROLEHAN KURSI',
+        tdClass: ['text-right']
+      }, {
+        key: 'detail',
+        label: 'URUTAN',
+        tdClass: ['text-right']
+      }], (value) => {
+        vm.s1Fields.push(value);
       })
     },
     createParties (parties, ranks) {
@@ -728,11 +778,17 @@ export default {
     smFields () {
       return this.mFields
     },
+    ss1Fields () {
+      return this.s1Fields
+    },
     sItems () {
       return this.mItems
     },
     cNumSplit () {
       return window._.map(window._.range(1, this.numSplit + 1), x => `c.r${x}`);
+    },
+    cSumBallots () {
+      return window._.sumBy(this.sItems, x => Number(x.ballot));
     },
     cRanks () {
       return this.ranks;
