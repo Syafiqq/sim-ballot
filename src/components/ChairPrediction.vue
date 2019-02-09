@@ -259,11 +259,7 @@ export default {
       this.$refs.reportModal.show()
     },
     translate (n) {
-      if (n === 1) {
-        return 'Pertama';
-      } else {
-        return `Ke${window.IDT.translate(n.toString()).toLowerCase()}`
-      }
+      return `ke-${n}`
     },
     downloadReportPdf () {
       const vm = this;
