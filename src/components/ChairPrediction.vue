@@ -9,7 +9,7 @@
         b-form-group(label-cols-sm='3' label='Dapil', label-for='form-area')
           b-form-input#form-area(type='text', v-model='area', required='', placeholder='Masukkan Nama Dapil', autocomplete="nope")
         b-form-group(label-cols-sm='3' label='Jumlah Kursi', label-for='form-alloc')
-          b-form-input#form-alloc(type='number', v-model.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
+          b-form-input#form-alloc(type='number', v-model.number.lazy='ranks', required='', placeholder='Masukkan Jumlah Kursi', @input="calculateAllocation()")
       .w-100(slot='modal-footer')
         b-btn.float-right(size='sm', variant='danger', @click='settingModalState=false') Close
     b-modal(ref='reportModal', size='lg', v-model='reportModalState' hide-header='')
@@ -79,7 +79,7 @@ export default {
       s1Fields: [],
       s2Fields: [],
       numSplit: 0,
-      ranks: 0,
+      ranks: '0',
       settingModalState: true,
       reportModalState: false,
       total: 0,
@@ -103,7 +103,7 @@ export default {
     async fetch () {
       const {parties, num_ranks, total_ranks} = await ConfigRepository.get();
       this.numSplit = num_ranks;
-      this.ranks = total_ranks;
+      this.ranks = total_ranks.toString();
       this.parties = parties;
       this.party = this.parties[0];
       this.mergeFields();
@@ -234,10 +234,12 @@ export default {
     },
     calculateAllocation () {
       let max = this.sItems.length * this.numSplit;
-      if (this.ranks > (max))
-        this.ranks = max;
-      if (this.ranks < 0)
-        this.ranks = 0;
+      let ranks = this.cRanks;
+      if (ranks > (max))
+        ranks = max;
+      if (ranks < 0)
+        ranks = 0;
+      this.ranks = ranks.toString();
       window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
@@ -812,7 +814,7 @@ export default {
       return window._.sumBy(this.sItems, x => Number(x.ballot));
     },
     cRanks () {
-      return this.ranks;
+      return Number(this.ranks);
     },
     csRanks () {
       return window._.map(window._.range(1, Number(this.cRanks) + 1), x => {
