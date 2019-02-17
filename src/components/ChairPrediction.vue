@@ -119,7 +119,7 @@ export default {
       }, {
         key: 'party',
         label: 'Partai',
-        thStyle: {width: '150px'},
+        thStyle: {width: '450px'},
         tdClass: ['text-uppercase', 'bg-party']
       }, {
         key: 'ballot',
