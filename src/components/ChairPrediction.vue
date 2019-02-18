@@ -261,6 +261,16 @@ export default {
       if (vm.settingModalState || vm.reportModalState)
         return;
       let inter = setInterval(function () {
+        for (let j = 0, js = vm.parties.length; ++j <= js;) {
+          let daf = vm.$refs[`if-${j}`];
+          if (daf != null && daf === document.activeElement && j !== vm.focus) {
+            vm.focus = j;
+            daf.focus();
+            daf.select();
+            console.log(`jancok`);
+            clearInterval(inter)
+          }
+        }
         let daf = vm.$refs[`if-${vm.focus}`];
         if (daf != null && daf !== document.activeElement) {
           daf.focus();
