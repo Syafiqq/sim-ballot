@@ -550,7 +550,6 @@ export default {
         col = '';
         col = __nextChar(col);
 
-        worksheet.getRow(row).height = __scale(15);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
         worksheet.getCell(`${col}${row}`).value = k + 1;
         worksheet.getCell(`${col}${row}`).border = {
@@ -713,7 +712,6 @@ export default {
         col = '';
         col = __nextChar(col);
 
-        worksheet.getRow(row).height = __scale(15);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
         worksheet.getCell(`${col}${row}`).value = vm.cRanks - n;
         worksheet.getCell(`${col}${row}`).fill = {
