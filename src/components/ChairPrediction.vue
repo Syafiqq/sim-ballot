@@ -239,7 +239,7 @@ export default {
         ranks = max;
       if (ranks < 0)
         ranks = 0;
-      //this.ranks = ranks.toString();
+      this.ranks = ranks.toString();
       window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
