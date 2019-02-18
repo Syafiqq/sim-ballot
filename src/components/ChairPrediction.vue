@@ -51,7 +51,7 @@
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
-        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)" @focus="focus=data.item.no", v-on:keyup.enter="onBallotChange($event,data.item)")
+        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" :value='data.item.ballot', v-on:keydown.enter="data.item.ballot=$event.target.value, onBallotChange($event,data.item,data.item.no)", v-on:keydown.tab="data.item.ballot=$event.target.value, onBallotChange($event,data.item,data.item.no)", v-on:blur="data.item.ballot=$event.target.value, onBallotChange($event,data.item)")
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key="`B-${d.pos}`", style="width:2.5em; margin:0 8px")
           span.font-xl {{d.dis}}
@@ -258,20 +258,11 @@ export default {
     },
     nextFocus () {
       let vm = this;
+      let foc = vm.focus;
       if (vm.settingModalState || vm.reportModalState)
         return;
       let inter = setInterval(function () {
-        for (let j = 0, js = vm.parties.length; ++j <= js;) {
-          let daf = vm.$refs[`if-${j}`];
-          if (daf != null && daf === document.activeElement && j !== vm.focus) {
-            vm.focus = j;
-            daf.focus();
-            daf.select();
-            console.log(`jancok`);
-            clearInterval(inter)
-          }
-        }
-        let daf = vm.$refs[`if-${vm.focus}`];
+        let daf = vm.$refs[`if-${foc}`];
         if (daf != null && daf !== document.activeElement) {
           daf.focus();
           daf.select();
