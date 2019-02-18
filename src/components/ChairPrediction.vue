@@ -32,7 +32,7 @@
             template(slot='alloc', slot-scope='data')
               span.pr-3 {{data.value}}
             template(slot='detail', slot-scope='data')
-              span(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px") {{d}}
+              span(v-for="d in data.value", variant='info', :key="`A-${d.pos}`", style="width:2.5em; margin:0 8px") {{d.dis}}
         b-tab(title='Summary 2')
           b-table(responsive='', bordered='', outlined='', hover='', small='', :items='csRanks', :fields='ss2Fields')
             template(slot='x', slot-scope='data')
@@ -53,8 +53,8 @@
       template(slot='ballot', slot-scope='data')
         input.form-control-sm(type='number', style='width:8em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
       template(slot='detail', slot-scope='data')
-        b-badge(v-for="d in data.value", variant='info', :key='d', style="width:2.5em; margin:0 8px")
-          span.font-xl {{d}}
+        b-badge(v-for="d in data.value", variant='info', :key="`B-${d.pos}`", style="width:2.5em; margin:0 8px")
+          span.font-xl {{d.dis}}
     fab(:actions="fabs", main-icon='menu', @setting="openSettings", @report="openReport")
 </template>
 
@@ -241,7 +241,9 @@ export default {
       window._.forEach(this.sItems, v => {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
-        v.detail = window._.map(col, x => x.position_display);
+        v.detail = window._.map(col, x => {
+          return {pos : x.position, dis : x.position_display}
+        });
       })
     },
     onBallotChange (e, v) {
@@ -290,7 +292,7 @@ export default {
         let ar = [];
         ar.push([d('NO', true, 12, 1), d('PARTAI POLITIK', true, 12, 1), d('JUMLAH PEROLEAHAN SUARA', true, 12, 1), d('PEROLEHAN KURSI SAINTE LAGUE', true, 12, 1), d('PESEBARAN URUTAN', true, 12, 1)]);
         window._.forEach(vm.sItems, (v, k) => {
-          ar.push([d(k + 1, false, 12, 2), d(`${v.party}`, false, 12, 0), d(Number(v.ballot), false, 12, 2), d((v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-', false, 12, 2), d((v.detail == null || v.detail.length <= 0) ? '-' : window._.join(v.detail, ', '), false, 12, 2)]);
+          ar.push([d(k + 1, false, 12, 2), d(`${v.party}`, false, 12, 0), d(Number(v.ballot), false, 12, 2), d((v.alloc >= 1 && v.alloc <= vm.cRanks) ? v.alloc : '-', false, 12, 2), d((v.detail == null || v.detail.length <= 0) ? '-' : window._.join(window._.map(v.detail, z => z.dis), ', '), false, 12, 2)]);
         });
         ar.push([
           {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
@@ -569,7 +571,7 @@ export default {
 
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = (v.detail == null || v.detail.length <= 0) ? '-' : window._.join(v.detail, ', ');
+        worksheet.getCell(`${col}${row}`).value = (v.detail == null || v.detail.length <= 0) ? '-' : window._.join(window._.map(v.detail, z => z.dis), ', ');
         worksheet.getCell(`${col}${row}`).border = {
           top: {style: 'thin'},
           left: {style: 'thin'},
