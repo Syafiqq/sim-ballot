@@ -51,7 +51,7 @@
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
-        input.form-control-sm(type='number', style='width:8em', v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item)")
+        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)")
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key="`B-${d.pos}`", style="width:2.5em; margin:0 8px")
           span.font-xl {{d.dis}}
@@ -70,6 +70,7 @@ export default {
   },
   data () {
     return {
+      focus: 1,
       parties: [],
       party: '',
       district: '',
@@ -200,7 +201,7 @@ export default {
         vm.mItems.push(item)
       })
     },
-    onRanksChange () {
+    onRanksChange (iss) {
       while (this.process.length > 0) {
         this.process.pop()
       }
@@ -230,9 +231,9 @@ export default {
         this.mItems[v.s0]['c'][v.s2]['position'] = k + 1;
         this.mItems[v.s0]['c'][v.s2]['position_display'] = dr;
       });
-      this.calculateAllocation();
+      this.calculateAllocation(iss);
     },
-    calculateAllocation () {
+    calculateAllocation (iss) {
       let max = this.sItems.length * this.numSplit;
       let ranks = this.cRanks;
       if (ranks > (max))
@@ -244,17 +245,27 @@ export default {
         let col = window._.filter(v.c, x => x.position <= this.cRanks);
         v.alloc = col.length;
         v.detail = window._.map(col, x => {
-          return {pos : x.position, dis : x.position_display}
+          return {pos: x.position, dis: x.position_display}
         });
-      })
+      });
+      if (iss != null) {
+        this.focus = Number(iss);
+        this.nextFocus();
+      }
     },
-    onBallotChange (e, v) {
+    nextFocus () {
+      let next = this.focus + 1;
+      let el = this.$refs[`if-${next}`];
+      if (el != null)
+        el.focus();
+    },
+    onBallotChange (e, v, iss) {
       window._.forEach(v.c, (v1) => {
         v1.value = Number(Math.round(v.ballot / (v1.rank * 2 - 1)));
       });
       this.total = 0;
       window._.forEach(this.sItems, x => this.total += x.ballot);
-      this.onRanksChange();
+      this.onRanksChange(iss);
     },
     openSettings () {
       this.$refs.settingsModal.show()
