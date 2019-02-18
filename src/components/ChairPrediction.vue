@@ -51,7 +51,7 @@
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
-        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)")
+        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)" @focus="focus=data.item.no", v-on:keyup.enter="onBallotChange($event,data.item,data.item.no)")
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key="`B-${d.pos}`", style="width:2.5em; margin:0 8px")
           span.font-xl {{d.dis}}
@@ -249,15 +249,26 @@ export default {
         });
       });
       if (iss != null) {
-        this.focus = Number(iss);
-        this.nextFocus();
+        this.changeFocus(iss)
       }
     },
+    changeFocus (iss) {
+      this.focus = (Number(iss) % (this.parties.length)) + 1;
+      this.nextFocus();
+    },
     nextFocus () {
-      let next = this.focus + 1;
-      let el = this.$refs[`if-${next}`];
-      if (el != null)
-        el.focus();
+      let vm = this;
+      if (vm.settingModalState || vm.reportModalState)
+        return;
+      let inter = setInterval(function () {
+        let daf = vm.$refs[`if-${vm.focus}`];
+        if (daf != null && daf !== document.activeElement) {
+          daf.focus();
+          daf.select();
+          clearInterval(inter)
+        }
+      }, 100);
+
     },
     onBallotChange (e, v, iss) {
       window._.forEach(v.c, (v1) => {
