@@ -51,7 +51,7 @@
       template(slot='party', slot-scope='data')
         span.pr-3 {{data.value}}
       template(slot='ballot', slot-scope='data')
-        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)" @focus="focus=data.item.no", v-on:keyup.enter="onBallotChange($event,data.item,data.item.no)")
+        input.form-control-sm(type='number', style='width:8em', :ref="`if-${data.item.no}`" v-model.lazy='data.item.ballot', @change="onBallotChange($event,data.item,data.item.no)" @focus="focus=data.item.no", v-on:keyup.enter="onBallotChange($event,data.item)")
       template(slot='detail', slot-scope='data')
         b-badge(v-for="d in data.value", variant='info', :key="`B-${d.pos}`", style="width:2.5em; margin:0 8px")
           span.font-xl {{d.dis}}
