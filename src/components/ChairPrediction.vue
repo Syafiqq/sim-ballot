@@ -324,7 +324,7 @@ export default {
           {},
           d(_t.ballots + "", false, 12, 2),
           d(vm.cRanks + "", false, 12, 2),
-          d(window._.join(window._.sortBy(window._.concat(window._.flatten(window._.map(vm.sItems, x => x.detail || [])))), ', ') || '-', false, 12, 2)]);
+          d('-', false, 12, 2)]);
         return {
           widths: [25, 150, 120, 120, '*'],
           body: ar
@@ -642,7 +642,7 @@ export default {
 
       col = __nextChar(col);
       worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', horizontal: 'right', wrapText: true};
-      worksheet.getCell(`${col}${row}`).value = window._.join(window._.sortBy(window._.concat(window._.flatten(window._.map(vm.sItems, x => x.detail || [])))), ', ') || '-';
+      worksheet.getCell(`${col}${row}`).value = '-';
       worksheet.getCell(`${col}${row}`).border = {
         top: {style: 'thin'},
         left: {style: 'thin'},
