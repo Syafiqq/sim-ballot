@@ -36,7 +36,7 @@
         b-tab(title='Summary 2')
           b-table(responsive='', bordered='', outlined='', hover='', small='', :items='csRanks', :fields='ss2Fields')
             template(slot='x', slot-scope='data')
-              span.pr-3 {{`Kursi ${translate(process[data.item.no - 1].s0 + 1)}`}}
+              span.pr-3 {{`Kursi ${translate(ddis(data.item.no - 1, data.item.no))}`}}
             template(slot='y', slot-scope='data')
               span.pr-3 {{mItems[process[data.item.no - 1].s0].party}}
       dl.row
@@ -298,7 +298,7 @@ export default {
         ar.push([d('NO', true, 12, 1), d('KURSI', true, 12, 1), d('PARTAI', true, 12, 1)]);
         let n = vm.cRanks;
         while (--n >= 0) {
-          ar.push([d(vm.cRanks - n, false, 12, 2), d(`Kursi ${vm.translate(vm.process[vm.cRanks - n - 1].s0 + 1)}`, false, 12, 0), d(vm.mItems[vm.process[vm.cRanks - n - 1].s0].party, false, 12, 0)]);
+          ar.push([d(vm.cRanks - n, false, 12, 2), d(`Kursi ${vm.translate(vm.ddis(vm.cRanks - n - 1, vm.cRanks - n))}`, false, 12, 0), d(vm.mItems[vm.process[vm.cRanks - n - 1].s0].party, false, 12, 0)]);
         }
         ar.push([
           {text: 'Total', fontSize: 12, bold: true, alignment: 'left', colSpan: 2},
@@ -727,7 +727,7 @@ export default {
         };
         col = __nextChar(col);
         worksheet.getCell(`${col}${row}`).alignment = {vertical: 'middle', wrapText: true};
-        worksheet.getCell(`${col}${row}`).value = `Kursi ${vm.translate(vm.process[vm.cRanks - n - 1].s0 + 1)}`;
+        worksheet.getCell(`${col}${row}`).value = `Kursi ${vm.translate(vm.ddis(vm.cRanks - n - 1, vm.cRanks - n))}`;
         worksheet.getCell(`${col}${row}`).fill = {
           type: 'pattern',
           pattern: 'solid',
@@ -813,6 +813,9 @@ export default {
           let blob = new Blob([data], {type: mimeType});
           window.FileSaver.saveAs(blob, path);
         });
+    },
+    ddis (idx, no) {
+      return window._.filter(this.mItems[this.process[idx].s0].detail, x => x.pos === no)[0].dis
     }
   },
   computed: {
