@@ -32,7 +32,7 @@
             template(slot='alloc', slot-scope='data')
               span.pr-3 {{data.value}}
             template(slot='detail', slot-scope='data')
-              span(v-for="d in data.value", variant='info', :key="`A-${d.pos}`", style="width:2.5em; margin:0 8px") {{d.dis}}
+              span(v-for="(d, id) in data.value", variant='info', :key="`A-${d.pos}`", style="width:2.5em; margin:0 8px") {{d.dis}}{{(id >= (data.value.length - 1) ? '' : ',')}}
         b-tab(title='Summary 2')
           b-table(responsive='', bordered='', outlined='', hover='', small='', :items='csRanks', :fields='ss2Fields')
             template(slot='x', slot-scope='data')
