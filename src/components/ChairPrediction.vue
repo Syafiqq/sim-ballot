@@ -815,7 +815,7 @@ export default {
         });
     },
     ddis (idx, no) {
-      return window._.filter(this.mItems[this.process[idx].s0].detail, x => x.pos === no)[0].dis
+      return window._.filter(this.mItems[this.process[idx].s0].detail, x => x.pos === no)[0].pos
     }
   },
   computed: {
